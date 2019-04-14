@@ -5,39 +5,38 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Progressive Web Apps</title>
+  <title>An Example PWA</title>
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
   <link rel="stylesheet" href="/src/css/app.css">
 </head>
 <body>
-<div class="title">
-  <h1>Progressive Web Apps</h1>
-</div>
-<div class="content">
-  <div class="course-feature" id="installable">
-    <p>They're installable (without an App Store)!</p>
+<header class="main-header">
+  <h1>PWAs are great!</h1>
+  <h3>From offline support to native device features.</h3>
+</header>
+<article class="card" id="pwa">
+  <div class="card__image">
+    <img src="/src/images/pwa.jpg" alt="PWAs are great!">
   </div>
-  <div class="course-feature" id="offline">
-    <p>They can work offline!</p>
+  <div class="card__content">
+    <p>PWAs are great, since you can build native-mobile-app-like experiences.</p>
+    <p>Core features are:</p>
+    <ul>
+      <li>Installable on <strong>Homescreen</strong></li>
+      <li><strong>Offline support</strong> with service workers</li>
+      <li>Usage of various <strong>caching strategies</strong></li>
+      <li>Web <strong>push notifications</strong></li>
+      <li><strong>Background sync</strong></li>
+      <li>Native device features like <strong>camera</strong></li>
+      <li>Way more...</li>
+    </ul>
   </div>
-  <div class="course-feature" id="responsive">
-    <p>They look good on any device</p>
+  <div class="card__details">
+    <p>PWAs really are awesome. And you can turn any application into a PWA.</p>
+    <p>Or simply start using some of the features that make up a complete PWA. That process is called "progressive enhancement" and what the "progressive" in "Progressive Web App" stands for.</p>
+    <p>Don't hesitate, dive into PWAs!</p>
   </div>
-  <div class="course-feature" id="push">
-    <p>You can receive Push Messages...</p>
-  </div>
-  <div class="course-feature" id="notifications">
-    <p>...and show Notifications</p>
-  </div>
-  <div class="course-feature" id="native-features">
-    <p>PWAs can access native device features like the Camera</p>
-  </div>
-  <div class="course-feature" id="more">
-    <p>And so much more!</p>
-  </div>
-</div>
-<div class="start-over">
-  <button>Start Again!</button>
-</div>
+</article>
 <script src="/src/js/app.js"></script>
 </body>
 </html>
