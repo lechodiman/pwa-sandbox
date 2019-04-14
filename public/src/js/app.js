@@ -1,7 +1,14 @@
-var pwaCard = document.querySelector("#pwa");
-var pwaCardContent = pwaCard.querySelector(".card__content");
-var pwaCardDetails = pwaCard.querySelector(".card__details");
-var detailsShown = false;
+const pwaCard = document.querySelector("#pwa");
+const pwaCardContent = pwaCard.querySelector(".card__content");
+const pwaCardDetails = pwaCard.querySelector(".card__details");
+let detailsShown = false;
+
+// Make sure that even if the user visits another page (like about) the service worker is registered
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("/sw.js")
+    .then(() => console.log("Service worker registered"));
+}
 
 pwaCard.addEventListener("click", function(event) {
   if (!detailsShown) {

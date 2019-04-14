@@ -53,3 +53,7 @@ Access User Location
 ## Media API
 
 Access device camera.
+
+## Service Worker support
+
+Go to [is service worker ready](https://jakearchibald.github.io/isserviceworkerready/)
