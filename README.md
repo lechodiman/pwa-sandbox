@@ -35,3 +35,21 @@
 ### PWA
 
 - You get the best from both worlds (the traditional web page and the mobile native app)
+
+# Core Building blocks
+
+## Service workers
+
+Allow caching, push notifications and background sync.
+
+## Application manifest
+
+Makes the application 'installable'
+
+## Geolocation API
+
+Access User Location
+
+## Media API
+
+Access device camera.
