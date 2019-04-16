@@ -9,9 +9,6 @@ self.addEventListener("install", function(event) {
   // wait until, because sw go idle after a certain amount of time and I don't want it to sleep while I cache data
   event.waitUntil(
     caches.open("static").then(cache => {
-      // cache.add("/");
-      // cache.add("/index.html");
-      // cache.add("/src/js/app.js");
       cache.addAll([
         "/",
         "/index.html",

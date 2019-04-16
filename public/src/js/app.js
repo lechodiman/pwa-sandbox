@@ -3,12 +3,29 @@ const pwaCardContent = pwaCard.querySelector(".card__content");
 const pwaCardDetails = pwaCard.querySelector(".card__details");
 let detailsShown = false;
 
-// Make sure that even if the user visits another page (like about) the service worker is registered
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register("/sw.js")
-    .then(() => console.log("Service worker registered"));
-}
+const registerServiceWorker = async () => {
+  if ("serviceWorker" in navigator) {
+    const swRegistration = await navigator.serviceWorker.register("/sw.js");
+    console.log("SW Registered");
+    return swRegistration;
+  }
+};
+
+const requestNotificationPermission = async () => {
+  const permission = await window.Notification.requestPermission();
+  // value of permission can be 'granted', 'default', 'denied'
+  // granted: user has accepted the request
+  // default: user has dismissed the notification permission popup by clicking on x
+  // denied: user has denied the request.
+  if (permission !== "granted") {
+    throw new Error("Permission not granted for Notification");
+  }
+};
+
+const main = async () => {
+  const swRegistration = await registerServiceWorker();
+  const permission = await requestNotificationPermission();
+};
 
 pwaCard.addEventListener("click", function(event) {
   if (!detailsShown) {
@@ -29,3 +46,5 @@ pwaCard.addEventListener("click", function(event) {
     }, 300);
   }
 });
+
+main();
