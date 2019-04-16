@@ -22,9 +22,22 @@ const requestNotificationPermission = async () => {
   }
 };
 
+const showLocalNotification = (title, body, swRegistration) => {
+  const options = { body };
+
+  swRegistration.showNotification(title, options);
+};
+
 const main = async () => {
   const swRegistration = await registerServiceWorker();
   const permission = await requestNotificationPermission();
+
+  // Showing notifications should be done in the service worker thread so the user can be notified even if the app is closed
+  showLocalNotification(
+    "Hello World",
+    "You have approved notifications",
+    swRegistration
+  );
 };
 
 pwaCard.addEventListener("click", function(event) {

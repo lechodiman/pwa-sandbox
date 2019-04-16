@@ -23,8 +23,16 @@ self.addEventListener("install", function(event) {
 });
 
 // it triggers when all instances of the service worker are closed, ie, after user installed the pwa and closed all tabs related to the page
-self.addEventListener("activate", function() {
+self.addEventListener("activate", async function() {
   console.log("SW activated");
+  try {
+    const options = {};
+    const subscription = await self.registration.pushManager.subscribe(options);
+    // In chrome this throws an error, in firefox it does not. This is because in chrome you have to specify the applicationServerKey (VAPID public key) and the userVisibleOnly parameters
+    console.log(JSON.stringify(subscription));
+  } catch (error) {
+    console.log("Error", error);
+  }
 });
 
 // fetch fires when the html does a fetch (like adding a script tag, adding a link tag, and so on.)
