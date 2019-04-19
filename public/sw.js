@@ -6,9 +6,8 @@ self.addEventListener("install", function(event) {
     caches.open("static").then(cache => {
       console.log("[SW]: caching app shell");
       cache.addAll([
-        "/",
+        "/", // think that you are caching requests
         "/index.html",
-        "/help/index.html",
         "/src/images/trump.jpg",
         "/src/js/app.js",
         "/src/css/app.css",
@@ -38,11 +37,16 @@ self.addEventListener("activate", async function() {
 
 self.addEventListener("fetch", function(event) {
   event.respondWith(
-    caches.match(event.request).then(res => {
-      if (res) {
-        return res;
+    caches.match(event.request).then(response => {
+      if (response) {
+        return response;
       } else {
-        return fetch(event.request);
+        return fetch(event.request).then(res => {
+          return caches.open("dynamic").then(cache => {
+            cache.put(event.request.url, res.clone());
+            return res;
+          });
+        });
       }
     })
   );

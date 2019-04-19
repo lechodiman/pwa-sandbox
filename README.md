@@ -57,3 +57,8 @@ Access device camera.
 ## Service Worker support
 
 Go to [is service worker ready](https://jakearchibald.github.io/isserviceworkerready/)
+
+
+## Dynamic caching
+
+In the `fetch` event of the Service Worker, data is stored in a `dynamic` cache if it was not found previously in the caches.
