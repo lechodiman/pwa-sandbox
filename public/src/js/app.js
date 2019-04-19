@@ -22,8 +22,16 @@ function showLocalNotification(title, body, swRegistration) {
   swRegistration.showNotification(title, options);
 }
 
+// Currently not in use, allows to save on demand
 function onSaveButtonClick(event) {
+  // Manually add to cache
   console.log("clicked");
+  if ("caches" in window) {
+    caches.open("user-requested").then(cache => {
+      cache.add("https://httpbin.org/get");
+      cache.add("/src/images/sf-boat.jpg");
+    });
+  }
 }
 
 function createCard() {
@@ -47,7 +55,7 @@ function createCard() {
 
   cardBody.appendChild(cardImage);
   cardBody.appendChild(cardTitle);
-  cardBody.appendChild(cardButton);
+  // cardBody.appendChild(cardButton);
 
   cardWrapper.appendChild(cardBody);
 

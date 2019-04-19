@@ -1,5 +1,5 @@
-const CACHE_STATIC_NAME = "static-v4";
-const CACHE_DYNAMIC_NAME = "dynamic-v2";
+const CACHE_STATIC_NAME = "static-v6";
+const CACHE_DYNAMIC_NAME = "dynamic-v3";
 
 // Self refers to the service worker process
 self.addEventListener("install", function(event) {
@@ -10,6 +10,7 @@ self.addEventListener("install", function(event) {
       cache.addAll([
         "/", // think that you are caching requests
         "/index.html",
+        "/offline.html",
         "/src/images/trump.jpg",
         "/src/js/app.js",
         "/src/css/app.css",
@@ -60,11 +61,15 @@ self.addEventListener("fetch", function(event) {
         return fetch(event.request)
           .then(res => {
             return caches.open(CACHE_DYNAMIC_NAME).then(cache => {
-              // cache.put(event.request.url, res.clone());
+              cache.put(event.request.url, res.clone());
               return res;
             });
           })
-          .catch(err => {});
+          .catch(err => {
+            return caches.open(CACHE_STATIC_NAME).then(cache => {
+              return cache.match("/offline.html");
+            });
+          });
       }
     })
   );
