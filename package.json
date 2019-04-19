@@ -1,20 +1,12 @@
 {
-  "name": "pwa-complete-guide",
+  "name": "pwa-twitter-clone",
   "version": "1.0.0",
-  "description": "A complete guide to PWAs. Building a simple Instagram clone.",
+  "description": "PWA Twitter Clone",
   "main": "index.js",
   "scripts": {
     "start": "http-server -c-1 -p 8080"
   },
-  "keywords": [
-    "pwa",
-    "progressive",
-    "web",
-    "app",
-    "complete",
-    "tutorial"
-  ],
-  "author": "Maximilian Schwarzmüller",
+  "author": "Luis Chodiman",
   "license": "ISC",
   "devDependencies": {
     "http-server": "^0.11.1"
