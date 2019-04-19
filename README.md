@@ -58,7 +58,6 @@ Access device camera.
 
 Go to [is service worker ready](https://jakearchibald.github.io/isserviceworkerready/)
 
-
 ## Dynamic caching
 
 In the `fetch` event of the Service Worker, data is stored in a `dynamic` cache if it was not found previously in the caches.
@@ -66,3 +65,11 @@ In the `fetch` event of the Service Worker, data is stored in a `dynamic` cache 
 ## Handling Errors
 
 The `An unknown error ocurred when fetching the script` cannot be avoided because it does not make sense to store the `Service Worker` in the cache.
+
+## Versioning caches
+
+If you happen to change the source code but no the Service Worker, the latest will fetch the **old** version of your source code. To avoid this, a common practice is versioning your caches.
+
+After that, you have to clean your old caches.
+
+The cleaning is done in the `activate` event.

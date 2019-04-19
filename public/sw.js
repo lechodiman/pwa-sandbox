@@ -1,9 +1,11 @@
+const CACHE_STATIC_NAME = "static-v3";
+const CACHE_DYNAMIC_NAME = "dynamic-v2";
+
 // Self refers to the service worker process
 self.addEventListener("install", function(event) {
   console.log("SW installed");
-  // wait until, because sw go idle after a certain amount of time and I don't want it to sleep while I cache data
   event.waitUntil(
-    caches.open("static").then(cache => {
+    caches.open(CACHE_STATIC_NAME).then(cache => {
       console.log("[SW]: caching app shell");
       cache.addAll([
         "/", // think that you are caching requests
@@ -23,16 +25,30 @@ self.addEventListener("install", function(event) {
 });
 
 // it triggers when all instances of the service worker are closed, ie, after user installed the pwa and closed all tabs related to the page
-self.addEventListener("activate", async function() {
-  console.log("SW activated");
-  try {
-    const options = {};
-    const subscription = await self.registration.pushManager.subscribe(options);
+self.addEventListener("activate", function(event) {
+  console.log("[SW]: Activating");
+  // Clean older versions of caches
+  event.waitUntil(
+    caches.keys().then(keyList => {
+      return Promise.all(
+        keyList.map(key => {
+          if (key !== CACHE_STATIC_NAME && key !== CACHE_DYNAMIC_NAME) {
+            console.log("[SW] Removing old cache", key);
+            return caches.delete(key);
+          }
+        })
+      );
+    })
+  );
 
-    console.log(JSON.stringify(subscription));
-  } catch (error) {
-    console.log("Error", error);
-  }
+  // try {
+  //   const options = {};
+  //   const subscription = await self.registration.pushManager.subscribe(options);
+
+  //   console.log(JSON.stringify(subscription));
+  // } catch (error) {
+  //   console.log("Error", error);
+  // }
 });
 
 self.addEventListener("fetch", function(event) {
@@ -43,7 +59,7 @@ self.addEventListener("fetch", function(event) {
       } else {
         return fetch(event.request)
           .then(res => {
-            return caches.open("dynamic").then(cache => {
+            return caches.open(CACHE_DYNAMIC_NAME).then(cache => {
               cache.put(event.request.url, res.clone());
               return res;
             });
