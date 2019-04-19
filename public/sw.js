@@ -7,10 +7,15 @@ self.addEventListener("install", function(event) {
       cache.addAll([
         "/",
         "/index.html",
+        "/help/index.html",
         "/src/images/trump.jpg",
         "/src/js/app.js",
         "/src/css/app.css",
         "/favicon.ico",
+        "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css",
+        "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js",
+        "https://code.jquery.com/jquery-3.3.1.slim.min.js",
+        "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js",
         "https://fonts.googleapis.com/css?family=Raleway:400,700"
       ]);
     })
