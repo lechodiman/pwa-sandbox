@@ -4,6 +4,7 @@ self.addEventListener("install", function(event) {
   // wait until, because sw go idle after a certain amount of time and I don't want it to sleep while I cache data
   event.waitUntil(
     caches.open("static").then(cache => {
+      console.log("[SW]: caching app shell");
       cache.addAll([
         "/",
         "/index.html",
