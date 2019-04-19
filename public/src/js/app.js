@@ -50,7 +50,9 @@ fetch("https://httpbin.org/get")
     return res.json();
   })
   .then(function(data) {
-    createCard();
+    if (sharedPostsArea) {
+      createCard();
+    }
   });
 
 registerServiceWorker();

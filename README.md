@@ -62,3 +62,7 @@ Go to [is service worker ready](https://jakearchibald.github.io/isserviceworkerr
 ## Dynamic caching
 
 In the `fetch` event of the Service Worker, data is stored in a `dynamic` cache if it was not found previously in the caches.
+
+## Handling Errors
+
+The `An unknown error ocurred when fetching the script` cannot be avoided because it does not make sense to store the `Service Worker` in the cache.
