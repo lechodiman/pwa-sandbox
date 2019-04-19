@@ -1,8 +1,3 @@
-// Created under public directory so it has scope over all of my pages
-// This guy is event driven
-// The main usage is caching
-// the cache stores a key value pair of request-response
-
 // Self refers to the service worker process
 self.addEventListener("install", function(event) {
   console.log("SW installed");
@@ -12,9 +7,9 @@ self.addEventListener("install", function(event) {
       cache.addAll([
         "/",
         "/index.html",
+        "/src/images/trump.jpg",
         "/src/js/app.js",
         "/src/css/app.css",
-        "/src/images/pwa.jpg",
         "/favicon.ico",
         "https://fonts.googleapis.com/css?family=Raleway:400,700"
       ]);
@@ -28,15 +23,13 @@ self.addEventListener("activate", async function() {
   try {
     const options = {};
     const subscription = await self.registration.pushManager.subscribe(options);
-    // In chrome this throws an error, in firefox it does not. This is because in chrome you have to specify the applicationServerKey (VAPID public key) and the userVisibleOnly parameters
+
     console.log(JSON.stringify(subscription));
   } catch (error) {
     console.log("Error", error);
   }
 });
 
-// fetch fires when the html does a fetch (like adding a script tag, adding a link tag, and so on.)
-// If we find the response in the cache, we return that one, else we fetch it
 self.addEventListener("fetch", function(event) {
   event.respondWith(
     caches.match(event.request).then(res => {
