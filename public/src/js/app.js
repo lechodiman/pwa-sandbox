@@ -22,15 +22,35 @@ function showLocalNotification(title, body, swRegistration) {
   swRegistration.showNotification(title, options);
 }
 
+function onSaveButtonClick(event) {
+  console.log("clicked");
+}
+
 function createCard() {
   const cardWrapper = document.createElement("div");
   cardWrapper.className = "card";
 
+  const cardImage = document.createElement("img");
+  cardImage.setAttribute("src", "src/images/sf-boat.jpg");
+  cardImage.className = "card-img-top";
+
   const cardBody = document.createElement("div");
   cardBody.className = "card-body";
-  cardBody.textContent = "This a super cool post";
+
+  const cardTitle = document.createElement("h5");
+  cardTitle.textContent = "This a super cool post";
+
+  const cardButton = document.createElement("button");
+  cardButton.classList.add("btn", "btn-primary");
+  cardButton.textContent = "Save offline";
+  cardButton.addEventListener("click", onSaveButtonClick);
+
+  cardBody.appendChild(cardImage);
+  cardBody.appendChild(cardTitle);
+  cardBody.appendChild(cardButton);
 
   cardWrapper.appendChild(cardBody);
+
   sharedPostsArea.appendChild(cardWrapper);
 }
 

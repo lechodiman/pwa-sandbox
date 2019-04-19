@@ -73,3 +73,7 @@ If you happen to change the source code but no the Service Worker, the latest wi
 After that, you have to clean your old caches.
 
 The cleaning is done in the `activate` event.
+
+## Offering cache on demand
+
+Look at the button in the card.
