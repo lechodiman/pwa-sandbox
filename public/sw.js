@@ -1,26 +1,28 @@
-const CACHE_STATIC_NAME = "static-v6";
+const CACHE_STATIC_NAME = "static-v8";
 const CACHE_DYNAMIC_NAME = "dynamic-v3";
+const STATIC_FILES = [
+  "/", // think that you are caching requests
+  "/index.html",
+  "/offline.html",
+  "/src/images/trump.jpg",
+  "/src/js/app.js",
+  "/src/js/feed.js",
+  "/src/css/app.css",
+  "/favicon.ico",
+  "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css",
+  "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js",
+  "https://code.jquery.com/jquery-3.3.1.slim.min.js",
+  "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js",
+  "https://fonts.googleapis.com/css?family=Raleway:400,700"
+];
 
 // Self refers to the service worker process
 self.addEventListener("install", function(event) {
-  console.log("SW installed");
+  console.log("[SW] Installing service worker");
   event.waitUntil(
     caches.open(CACHE_STATIC_NAME).then(cache => {
-      console.log("[SW]: caching app shell");
-      cache.addAll([
-        "/", // think that you are caching requests
-        "/index.html",
-        "/offline.html",
-        "/src/images/trump.jpg",
-        "/src/js/app.js",
-        "/src/css/app.css",
-        "/favicon.ico",
-        "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css",
-        "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js",
-        "https://code.jquery.com/jquery-3.3.1.slim.min.js",
-        "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js",
-        "https://fonts.googleapis.com/css?family=Raleway:400,700"
-      ]);
+      console.log("[SW]: Caching app shell");
+      cache.addAll(STATIC_FILES);
     })
   );
 });
@@ -41,6 +43,7 @@ self.addEventListener("activate", function(event) {
       );
     })
   );
+  return self.clients.claim();
 
   // try {
   //   const options = {};
@@ -52,27 +55,53 @@ self.addEventListener("activate", function(event) {
   // }
 });
 
+function isInArray(string, array) {
+  for (let index = 0; index < array.length; index++) {
+    const element = array[index];
+    if (element === string) {
+      return true;
+    }
+    return false;
+  }
+}
+
 self.addEventListener("fetch", function(event) {
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      if (response) {
-        return response;
-      } else {
-        return fetch(event.request)
-          .then(res => {
-            return caches.open(CACHE_DYNAMIC_NAME).then(cache => {
-              cache.put(event.request.url, res.clone());
-              return res;
+  const url = "https://httpbin.org/get";
+  // If the fetch is for this url, save to dynamic cache
+  if (event.request.url.indexOf(url) > -1) {
+    event.respondWith(
+      caches.open(CACHE_DYNAMIC_NAME).then(cache => {
+        return fetch(event.request).then(res => {
+          cache.put(event.request, res.clone());
+          return res;
+        });
+      })
+    );
+  } else if (isInArray(event.request.url, STATIC_FILES)) {
+    // If the url is for the STATIC_FILES, send the cached version
+    event.respondWith(caches.match(event.request));
+  } else {
+    event.respondWith(
+      caches.match(event.request).then(response => {
+        if (response) {
+          return response;
+        } else {
+          return fetch(event.request)
+            .then(res => {
+              return caches.open(CACHE_DYNAMIC_NAME).then(cache => {
+                cache.put(event.request.url, res.clone());
+                return res;
+              });
+            })
+            .catch(err => {
+              return caches.open(CACHE_STATIC_NAME).then(cache => {
+                if (event.request.headers.get("accept").includes("text/html")) {
+                  return cache.match("/offline.html");
+                }
+              });
             });
-          })
-          .catch(err => {
-            return caches.open(CACHE_STATIC_NAME).then(cache => {
-              if (event.request.url.indexOf("/help")) {
-                return cache.match("/offline.html");
-              }
-            });
-          });
-      }
-    })
-  );
+        }
+      })
+    );
+  }
 });
