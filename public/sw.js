@@ -16,6 +16,17 @@ const STATIC_FILES = [
   "https://fonts.googleapis.com/css?family=Raleway:400,700"
 ];
 
+function trimCache(cacheName, maxItems) {
+  caches.open(cacheName).then(cache => {
+    cache.keys().then(keyList => {
+      if (keyList.length > maxItems) {
+        // Delete oldest item in cache until the condition above is false
+        cache.delete(keys[0]).then(trimCache(cacheName, maxItems));
+      }
+    });
+  });
+}
+
 // Self refers to the service worker process
 self.addEventListener("install", function(event) {
   console.log("[SW] Installing service worker");
